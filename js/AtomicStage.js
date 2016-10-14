@@ -1,130 +1,9 @@
-
-  // Define elements included
-  var elementsIncluded = [
-    { symbol : 'H', name : 'Hydrogen', position: {x:-16,y:4} },
-    { symbol : 'He', name : 'Helium', position: {x:18,y:4} },
-
-    { symbol : 'Li', name : 'Lithium', position: {x:-16,y:2} },
-    { symbol : 'Be', name : 'Beryllium', position: {x:-14,y:2} },
-    { symbol : 'B', name : 'Boron', position: {x:8,y:2} },
-    { symbol : 'C', name : 'Carbon', position: {x:10,y:2} },
-    { symbol : 'N', name : 'Nitrogen', position: {x:12,y:2} },
-    { symbol : 'O', name : 'Oxygen', position: {x:14,y:2} },
-    { symbol : 'F', name : 'Fluorine', position: {x:16,y:2} },
-    { symbol : 'Ne', name : 'Neon', position: {x:18,y:2} },
-
-    { symbol : 'Na', name : 'Sodium', position: {x:-16,y:0} },
-    { symbol : 'Mg', name : 'Magnesium', position: {x:-14,y:0} },
-    { symbol : 'Al', name : 'Aluminium', position: {x:8,y:0} },
-    { symbol : 'Si', name : 'Silicon', position: {x:10,y:0} },
-    { symbol : 'P', name : 'Phosphorus', position: {x:12,y:0} },
-    { symbol : 'S', name : 'Sulfur', position: {x:14,y:0} },
-    { symbol : 'Cl', name : 'Chlorine', position: {x:16,y:0} },
-    { symbol : 'Ar', name : 'Argon', position: {x:18,y:0} },
-
-    { symbol : 'K', name : 'Potassium', position: {x:-16,y:-2} },
-    { symbol : 'Ca', name : 'Calcium', position: {x:-14,y:-2} },
-    { symbol : 'Sc', name : 'Scandium', position: {x:-12,y:-2} },
-    { symbol : 'Ti', name : 'Titanium', position: {x:-10,y:-2} },
-    { symbol : 'V', name : 'Vanadium', position: {x:-8,y:-2} },
-    { symbol : 'Cr', name : 'Chromium', position: {x:-6,y:-2} },
-    { symbol : 'Mn', name : 'Manganese', position: {x:-4,y:-2} },
-    { symbol : 'Fe', name : 'Iron', position: {x:-2,y:-2} },
-    { symbol : 'Co', name : 'Cobalt', position: {x:0,y:-2} },
-    { symbol : 'Ni', name : 'Nickel', position: {x:2,y:-2} },
-    { symbol : 'Cu', name : 'Copper', position: {x:4,y:-2} },
-    { symbol : 'Zn', name : 'Zinc', position: {x:6,y:-2} },
-    { symbol : 'Ga', name : 'Gallium', position: {x:8,y:-2} },
-    { symbol : 'Ge', name : 'Germanium', position: {x:10,y:-2} },
-    { symbol : 'As', name : 'Arsenic', position: {x:12,y:-2} },
-    { symbol : 'Se', name : 'Selenium', position: {x:14,y:-2} },
-    { symbol : 'Br', name : 'Bromine', position: {x:16,y:-2} },
-    { symbol : 'Kr', name : 'Krypton', position: {x:18,y:-2} }
-  ];
-  // For pixel position, add 16 to x and subtract four from y and make positive
-  elementsIncluded.forEach(function(element,index,array) {
-    $('.simple-element-list').append('<div class="element" id="'+element.name+'" style="margin-left:'+((parseInt(element.position.x)+16)*15)+'px;margin-top:'+Math.abs((element.position.y-4)*15)+'px;">'+element.symbol+'</div>');
-  });
-
-  // Click functions
-  $(document).on('click','.element',function() {
-    for( var i = scene.children.length - 1; i >= 0; i--) {
-      if(scene.children[i].type.indexOf('Mesh')>-1) {
-        scene.remove(scene.children[i]);
-      }
-    }
-    makeProtonsAndNeutrons($(this).attr('id').toLowerCase());
-    render();
-  });
-
-  // List of elemental x,y,z points
-  var listOfElementLayouts = {
-    hydrogen : [
-      [{x:0,y:0,z:0}],
-      [],
-      [{'1s':1}],
-    ],
-    deuterium : [
-      [{x:0.5,y:0,z:0}],
-      [{x:-0.5,y:0,z:0}],
-      [{'1s':1}]
-    ],
-    helium : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0}],
-      [{'1s':2}]
-    ],
-    lithium : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5}],
-      [{'1s':2,'2s':1}]
-    ],
-    beryllium : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5}],
-      [{'1s':2,'2s':2}]
-    ],
-    boron : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5}],
-      [{'1s':2,'2s':2,'3p':1}]
-    ],
-    carbon : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:0.5}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:-0.5}],
-      [{'1s':2,'2s':2,'3p':2}]
-    ],
-    nitrogen : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:0.5}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:-0.5}],
-      [{'1s':2,'2s':2,'3p':3}]
-    ],
-    oxygen : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:0.5},{x:0,y:0.75,z:0.75}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:-0.5},{x:0,y:-0.75,z:-0.75}],
-      [{'1s':2,'2s':2,'3p':4}]
-    ],
-    fluorine : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:0.5},{x:0,y:0.75,z:0.75},{x:0,y:0.75,z:-0.75}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:-0.5},{x:0,y:-0.75,z:-0.75},{x:0,y:-0.75,z:0.75}],
-      [{'1s':2,'2s':2,'3p':5}]
-    ],
-    neon : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:0.5},{x:0,y:0.75,z:0.75},{x:0,y:0.75,z:-0.75},{x:0.75,y:0,z:0.75}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:-0.5},{x:0,y:-0.75,z:-0.75},{x:0,y:-0.75,z:0.75},{x:-0.75,y:0,z:-0.75}],
-      [{'1s':2,'2s':2,'3p':6}]
-    ],
-    sodium : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:0.5},{x:0,y:0.75,z:0.75},{x:0,y:0.75,z:-0.75},{x:0.75,y:0,z:0.75},{x:0.75,y:0.75,z:0}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:-0.5},{x:0,y:-0.75,z:-0.75},{x:0,y:-0.75,z:0.75},{x:-0.75,y:0,z:-0.75},{x:-0.75,y:-0.75,z:0}],
-      [{'1s':2,'2s':2,'3p':6}]
-    ],
-    magnesium : [
-      [{x:0.5,y:0,z:0},{x:-0.5,y:0,z:0},{x:0,y:0,z:-0.5},{x:0.5,y:0.5,z:0.5},{x:0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:0.5},{x:0,y:0.75,z:0.75},{x:0,y:0.75,z:-0.75},{x:-0.75,y:0,z:-0.75},{x:0.75,y:0.75,z:0},{x:-1,y:0,z:0}],
-      [{x:0,y:0.5,z:0},{x:0,y:-0.5,z:0},{x:0,y:0,z:0.5},{x:-0.5,y:-0.5,z:-0.5},{x:-0.5,y:-0.5,z:0.5},{x:-0.5,y:0.5,z:-0.5},{x:0.5,y:-0.5,z:-0.5},{x:0,y:-0.75,z:-0.75},{x:0,y:-0.75,z:0.75},{x:0.75,y:0,z:0.75},{x:-0.75,y:-0.75,z:0},{x:1,y:0,z:0}],
-      [{'1s':2,'2s':2,'3p':6}]
-    ],
-  }
+  // Some variables I'll use later
+  var color1s = 0x004899;
+  var color2p = 0xa31919;
+  var protonColor = 0xA2CEE9;
+  var neutronColor = 0x49311C;
+  var electronColor = 0xFFFFFF;
 
   // 3D work and rendering
   var three = THREE;
@@ -135,13 +14,9 @@
   var camera = new three.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 0.1, 1000);
 
   // Here, the position of the camera is tilted
-  camera.position.z = camera.position.z+100;
-  $('.back-to-start').click(function() {
-    camera.position.z = 100;
-    camera.position.x = 0;
-    camera.position.y = 0;
-    camera.lookAt({x:0,y:0,z:0});
-  });
+  camera.position.z = camera.position.z+60;
+  camera.position.x = camera.position.x+40;
+  camera.position.y = camera.position.y+20;
 
   var renderer = new three.WebGLRenderer({ alpha : true });
   renderer.setClearColor( 0xFFFFFF, 0 );
@@ -158,56 +33,6 @@
   var light = new THREE.PointLight( 0xffffff, 7, 15 );
   light.position.set( 0,10,10 );
   scene.add( light );
-
-  // Periodic table in 3D
-  var loader = new THREE.FontLoader();
-  loader.load("js/fonts/helvetiker_regular.typeface.js", function(font) {
-      elementsIncluded.forEach(function(element,index,array) {
-
-
-        var geometry = new THREE.TextGeometry( element.symbol, {
-          font: font,
-          size : 0.8,
-          height: 0.1
-        } );
-
-        var textMat = new THREE.MeshPhongMaterial({
-          color: 0x156289
-        });
-
-        var textMesh = new THREE.Mesh(geometry,textMat);
-        var box = new THREE.Box3().setFromObject( textMesh );
-
-        var geometry = new THREE.BoxBufferGeometry( 2, 2, 0.5 );
-        var boxMaterial =
-          new THREE.MeshLambertMaterial(
-            {
-              color: 0xA2CEE9,
-              transparent : true,
-              opacity: 0.3,
-            });
-
-        raycaster = new THREE.Raycaster();
-        var letterBox = new THREE.Mesh(geometry,boxMaterial);
-        letterBox.userData = {
-          name : element.name
-        };
-        textMesh.userData = {
-          name : element.name
-        };
-
-        var letterWidthX = box.max.x - box.min.x;
-        var letterHeightY = box.max.y - box.min.y;
-        var distanceFromBottom = ((letterWidthX+1)-(letterHeightY))/2;
-        letterBox.position.set(element.position.x,element.position.y,50);
-        textMesh.position.set(element.position.x-0.7,element.position.y,50);
-
-        scene.add(letterBox);
-        scene.add(textMesh);
-        render();
-
-      });
-  });
 
   // Proton
   function makeProtonsAndNeutrons(elementName) {
@@ -235,7 +60,7 @@
         var sphereMaterial =
           new THREE.MeshLambertMaterial(
             {
-              color: 0xA2CEE9
+              color: protonColor
             });
 
         var sphere = new THREE.Mesh(
@@ -263,7 +88,7 @@
         var sphereMaterial =
           new THREE.MeshLambertMaterial(
             {
-              color: 0x49311C
+              color: neutronColor
             });
 
         var sphere = new THREE.Mesh(
@@ -313,7 +138,7 @@
         var sphereMaterial =
           new THREE.MeshLambertMaterial(
             {
-              color: 0xFFFFFF,
+              color: electronColor,
               transparent : true,
               opacity: 0.8
             });
@@ -391,9 +216,9 @@
             var sphereMaterial =
               new THREE.MeshLambertMaterial(
                 {
-                  color: 0x004899,
+                  color: color1s,
                   transparent : true,
-                  opacity: 0.05,
+                  opacity: 0.34,
                   depthWrite: false
                 });
 
@@ -424,7 +249,7 @@
             var sphereMaterial =
               new THREE.MeshLambertMaterial(
                 {
-                  color: 0x004899,
+                  color: color2p,
                   transparent : true,
                   opacity: 0.1,
                   depthWrite: false
@@ -458,7 +283,7 @@
               var sphereMaterial =
                 new THREE.MeshLambertMaterial(
                   {
-                    color: 0xa31919,
+                    color: color2p,
                     transparent : true,
                     opacity: 0.1,
                     depthWrite: false
@@ -566,47 +391,37 @@
     }
   }
 
-  // shim layer with setTimeout fallback
-  // window.requestAnimFrame = (function(){
-  //     return  window.requestAnimationFrame ||
-  //         window.webkitRequestAnimationFrame ||
-  //         window.mozRequestAnimationFrame ||
-  //         function(callback) {
-  //             window.setTimeout(callback, 1000 / 60);
-  //         };
-  // })();
-
   THREEx.WindowResize(renderer, camera);
 
   function render() {
       renderer.render(scene, camera);
 
-      raycaster.setFromCamera( mouse, camera );
-
-      var intersects = raycaster.intersectObjects( scene.children );
-
-      if ( intersects.length > 0 ) {
-
-        if ( INTERSECTED != intersects[ 0 ].object ) {
-
-          if(typeof intersects[0].object.userData.name !== 'undefined') {
-
-            if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-
-            INTERSECTED = intersects[ 0 ].object;
-            INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-            INTERSECTED.material.color.setHex( 0xFF0000 );
-          }
-
-        }
-
-      } else {
-
-        if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
-
-        INTERSECTED = null;
-
-      }
+      // raycaster.setFromCamera( mouse, camera );
+      //
+      // var intersects = raycaster.intersectObjects( scene.children );
+      //
+      // if ( intersects.length > 0 ) {
+      //
+      //   if ( INTERSECTED != intersects[ 0 ].object ) {
+      //
+      //     if(typeof intersects[0].object.userData.name !== 'undefined') {
+      //
+      //       if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+      //
+      //       INTERSECTED = intersects[ 0 ].object;
+      //       INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+      //       INTERSECTED.material.color.setHex( 0xFF0000 );
+      //     }
+      //
+      //   }
+      //
+      // } else {
+      //
+      //   if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
+      //
+      //   INTERSECTED = null;
+      //
+      // }
 
       // requestAnimFrame(render);
   }
@@ -620,36 +435,36 @@
   render();
 
   // Events
-  document.addEventListener( 'mousemove', function() {
+  // document.addEventListener( 'mousemove', function() {
+  //
+  //   event.preventDefault();
+  //
+  //   mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+  //   mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  //
+  //   render();
+  //
+  // }, false );
 
-    event.preventDefault();
-
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-    render();
-
-  }, false );
-
-  document.addEventListener( 'click', function() {
-
-    raycaster.setFromCamera( mouse, camera );
-
-    var intersects = raycaster.intersectObjects( scene.children );
-
-    if ( intersects.length > 0 ) {
-
-        if(intersects[0].object.userData.name) {
-          for( var i = scene.children.length - 1; i >= 0; i--) {
-            console.log(scene.children[i]);
-            if(scene.children[i].type.indexOf('Mesh')>-1&&typeof scene.children[i].userData.name==='undefined') {
-              scene.remove(scene.children[i]);
-            }
-          }
-          makeProtonsAndNeutrons(intersects[0].object.userData.name.toLowerCase());
-          render();
-        }
-
-    }
-
-  },false);
+  // document.addEventListener( 'click', function() {
+  //
+  //   raycaster.setFromCamera( mouse, camera );
+  //
+  //   var intersects = raycaster.intersectObjects( scene.children );
+  //
+  //   if ( intersects.length > 0 ) {
+  //
+  //       if(intersects[0].object.userData.name) {
+  //         for( var i = scene.children.length - 1; i >= 0; i--) {
+  //           console.log(scene.children[i]);
+  //           if(scene.children[i].type.indexOf('Mesh')>-1&&typeof scene.children[i].userData.name==='undefined') {
+  //             scene.remove(scene.children[i]);
+  //           }
+  //         }
+  //         makeProtonsAndNeutrons(intersects[0].object.userData.name.toLowerCase());
+  //         render();
+  //       }
+  //
+  //   }
+  //
+  // },false);
