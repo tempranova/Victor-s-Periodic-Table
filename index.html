@@ -9,12 +9,15 @@
 		<!-- The following meta line optimizes the site for mobile devices. It sets the viewport size
 		to the screen size, so it will be displayed maximized, but unscaled. -->
 		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-    <link rel="stylesheet" href="bootstrap/bootstrap.css">
+		<link rel="stylesheet" href="bootstrap/bootstrap.css">
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 		<script src="bootstrap/bootstrap.js"></script>
+		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 		<!-- Include Three.js libraries -->
 		<script src="js/libraries/three.js"></script>
+		<script src="js/libraries/physi.js"></script>
 		<script src="js/libraries/Detector.js"></script>
 		<script src="js/libraries/CanvasRenderer.js"></script>
 		<script src="js/libraries/Projector.js"></script>
@@ -42,12 +45,26 @@
       </div>
     </nav>
     <div class="information">
+			<div class="element-info">
+				<div class="atomic-number">2</div>
+				<div class="element-symbol">He</div>
+				<div class="element-name">Helium</div>
+				<div class="atomic-mass">4.003</div>
+			</div>
+			<div class="display-info">
+				<div class="electron-shells">List of electron shells in checkbox list</div>
+				<div class="particles">List of proton, neutron, electron visibility</div>
+				<div class="modal">Maybe a modal dropdown</div>
+			</div>
     </div>
 		<div class="quicklinks">
 			<p class="back-to-start">Back to start</p>
 		</div>
 
 		<div id="AtomicStage"></div>
+
+		<div id="side-legend"></div>
+
 		<div id="SmallPeriodicTable">
 			<div class="simple-element-list"></div>
 		</div>

@@ -1,3 +1,7 @@
+
+  Physijs.scripts.worker = '/periodicTable/js/libraries/physijs_worker.js';
+  Physijs.scripts.ammo = '/periodicTable/js/libraries/ammo.js';
+
   // Some variables I'll use later
   var color1s = 0x004899;
   var color2p = 0xa31919;
@@ -5,12 +9,24 @@
   var neutronColor = 0x49311C;
   var electronColor = 0xFFFFFF;
 
-  // 3D work and rendering
-  var three = THREE;
+  var protons;
+  var neutrons;
+  var electrons;
+  var electronShells;
+  var filledSuborbitals;
+  var unfilledSuborbitals;
 
+  // Current atoms displayed on the screens
+  var currentElement = false;
+  var currentAtom;
+  var currentAtomsDisplayed = [];
+
+  // Basic three.js setup
+  var three = THREE;
   var raycaster = new THREE.Raycaster();
   var mouse = new THREE.Vector2(), INTERSECTED;
-  var scene = new three.Scene();
+  var scene = new Physijs.Scene;
+
   var camera = new three.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 0.1, 1000);
 
   // Here, the position of the camera is tilted
@@ -18,10 +34,10 @@
   camera.position.x = camera.position.x+40;
   camera.position.y = camera.position.y+20;
 
+  // Set up the 3D window on the page
   var renderer = new three.WebGLRenderer({ alpha : true });
   renderer.setClearColor( 0xFFFFFF, 0 );
   renderer.setSize(window.innerWidth, window.innerHeight);
-
   document.getElementById('AtomicStage').appendChild(renderer.domElement);
 
   // Add light
@@ -34,84 +50,110 @@
   light.position.set( 0,10,10 );
   scene.add( light );
 
+  // Major abilities should be:
+  // - Picking a first electron to put on stage
+  // - Picking a second electron to put on stage
+  // - Viewing different parts of an element (shells, protons, etc)
+  // - Rotating and viewing elements interacting as bonds
+  // - Introducing polarity
+  // Functions should be able to handle this easily
+  // - Making protons, electrons, neutrons, shells
+  // - Adding to an array, making removable, etc
+
+  function makeNucleon(element) {
+
+  }
+
+  function addElementToScene(element, offset) {
+    // Every particle for this element must be created and added to the first proton
+    // Then that group of particles is added to the array, where it's then added
+    makeNucleon(element, offset);
+  }
+
   // Proton
   function makeProtonsAndNeutrons(elementName) {
     // Protons have atomic weight of 1 and radius of 0.5
-
-    // Select the right element
-    var currentElement = false;
-    for(var element in listOfElementLayouts) {
-      if(element===elementName) {
-        currentElement = listOfElementLayouts[element];
-      }
+    if(typeof protons !=='undefined'&&typeof neutrons !=='undefined') {
+      scene.remove(protons);
+      scene.remove(neutrons);
     }
+    protons = new THREE.Group();
+    neutrons = new THREE.Group();
+
+    var that = this;
+    elementsIncluded.forEach(function(element,index,array) {
+      if(element.name.toLowerCase()===elementName) {
+        currentElement = element;
+      }
+    });
+
     if(currentElement) {
-      $('.information').html(
-        '<p><strong>Protons: </strong>' + currentElement[0].length+
-        '<br /><strong>Neutrons: </strong>' + currentElement[1].length
-      ).show();
 
       // Colour is blue
-      for(var i = 0; i < currentElement[0].length; i++) {
+      for(var i = 0; i < currentElement.layout[0].length; i++) {
         var radius = 0.5,
             segments = 16,
             rings = 16;
 
-        var sphereMaterial =
-          new THREE.MeshLambertMaterial(
-            {
-              color: protonColor
-            });
+        var sphereMaterial = new THREE.MeshLambertMaterial({ color: protonColor });
 
-        var sphere = new THREE.Mesh(
+        var sphere = new Physijs.SphereMesh(
+          new THREE.SphereGeometry(radius,segments,rings),
+          sphereMaterial
+        );
 
-          new THREE.SphereGeometry(
-            radius,
-            segments,
-            rings),
-
-          sphereMaterial);
         sphere.transparent = true;
-        var xPositionOffset = currentElement[0][i].x;
-        var yPositionOffset = currentElement[0][i].y;
-        var zPositionOffset = currentElement[0][i].z;
+        var xPositionOffset = currentElement.layout[0][i].x;
+        var yPositionOffset = currentElement.layout[0][i].y;
+        var zPositionOffset = currentElement.layout[0][i].z;
         sphere.position.set(xPositionOffset,yPositionOffset,zPositionOffset);
         scene.add(sphere);
+        if(i === 0) {
+          currentAtom = sphere;
+          protons.add(sphere);
+        } else {
+          protons.add(sphere);
+          currentAtom.add(sphere);
+        }
       }
+      scene.add(protons);
       // Neutrons have an atomic weight of 1 and radius of 0.5
       // Colour is brown neutral
-      for(var i = 0; i < currentElement[1].length; i++) {
+      for(var i = 0; i < currentElement.layout[1].length; i++) {
         var radius = 0.5,
             segments = 16,
             rings = 16;
 
-        var sphereMaterial =
-          new THREE.MeshLambertMaterial(
-            {
-              color: neutronColor
-            });
+        var sphereMaterial = new THREE.MeshLambertMaterial({ color: neutronColor });
 
-        var sphere = new THREE.Mesh(
+        var sphere = new Physijs.SphereMesh(
+          new THREE.SphereGeometry(radius,segments,rings),
+          sphereMaterial
+        );
 
-          new THREE.SphereGeometry(
-            radius,
-            segments,
-            rings),
-
-          sphereMaterial);
         sphere.transparent = true;
-        var xPositionOffset = currentElement[1][i].x;
-        var yPositionOffset = currentElement[1][i].y;
-        var zPositionOffset = currentElement[1][i].z;
+        var xPositionOffset = currentElement.layout[1][i].x;
+        var yPositionOffset = currentElement.layout[1][i].y;
+        var zPositionOffset = currentElement.layout[1][i].z;
         sphere.position.set(xPositionOffset,yPositionOffset,zPositionOffset);
-        scene.add(sphere);
+        neutrons.add(sphere);
+        currentAtom.add(sphere);
       }
+      scene.add(neutrons);
     }
     makeElectronsAndOrbitals(currentElement);
   }
 
   // Set up electrons inside their orbitals
   function makeElectronsAndOrbitals(currentElement) {
+    if(typeof electrons !=='undefined'&&typeof filledSuborbitals !=='undefined'&&typeof unfilledSuborbitals !=='undefined') {
+      scene.remove(electrons);
+      scene.remove(filledSuborbitals);
+      scene.remove(unfilledSuborbitals);
+    }
+    electrons = new THREE.Group();
+    filledSuborbitals = new THREE.Group();
+    unfilledSuborbitals = new THREE.Group();
     // Function for returning three valid random values in any direction
     function getRandomValue(min,max,symmetric) {
       // This number should accurately represent the space in the circle for 1s
@@ -153,7 +195,8 @@
           sphereMaterial);
         sphere.transparent = true;
         sphere.position.set(xPosition,yPosition,zPosition);
-        scene.add(sphere);
+        electrons.add(sphere);
+        currentAtom.add(sphere);
         allElectrons.push(sphere);
         setInterval(function() {
           for(i = 0; i < allElectrons.length; i++) {
@@ -202,14 +245,14 @@
 
     }
     // Shells for electrons
-    if(currentElement[2].length>0) {
+    if(currentElement.layout[2].length>0) {
       // Electron orbital shapes to create
-      currentElement[2].forEach(function(element,index,array) {
+      currentElement.layout[2].forEach(function(element,index,array) {
         for(var shell in element) {
           if(shell==='1s') {
             // First electron orbital (1s)
             // 0.53 Angstroms = radius of 2
-            var radius = 2 + (0.1 * (currentElement[1].length + currentElement[0].length)),
+            var radius = 2 + (0.1 * (currentElement.layout[1].length + currentElement.layout[0].length)),
                 segments = 16,
                 rings = 16;
 
@@ -231,18 +274,24 @@
 
               sphereMaterial);
             sphere.transparent = true;
-            scene.add(sphere);
-            makeElectrons(currentElement[2][index][shell], {
+            if(currentElement.layout[2][index][shell]>=2) {
+              filledSuborbitals.add(sphere);
+              currentAtom.add(sphere);
+            } else {
+              unfilledSuborbitals.add(sphere);
+              currentAtom.add(sphere);
+            }
+            makeElectrons(currentElement.layout[2][index][shell], {
                 x1:-(radius), x2: radius, y1: -(radius), y2: radius, z1: -(radius), z2: radius,
                 symmetric: {x: true, y: true, z: true},
                 offset : {x : 0, y: 0, z: 0}
               }
             )
           }
-          if(shell==='2s') {
-            // Second electron orbital (2s)
-            // ??
-            var radius = 6 + (0.1 * (currentElement[1].length + currentElement[0].length)),
+          if(shell==='2p') {
+            // Set of second electron orbitals (2p, includes 2s)
+            // 2s
+            var radius = 6 + (0.1 * (currentElement.layout[1].length + currentElement.layout[0].length)),
                 segments = 16,
                 rings = 16;
 
@@ -264,19 +313,27 @@
 
               sphereMaterial);
             sphere.transparent = true;
-            scene.add(sphere);
-            makeElectrons(currentElement[2][index][shell], {
+            if(currentElement.layout[2][index][shell]>=2) {
+              filledSuborbitals.add(sphere);
+              currentAtom.add(sphere);
+            } else {
+              unfilledSuborbitals.add(sphere);
+              currentAtom.add(sphere);
+            }
+            var electronsToMake = currentElement.layout[2][index][shell];
+            if(electronsToMake>2) {
+              electronsToMake = 2;
+            }
+            makeElectrons(electronsToMake, {
                 x1:-(radius), x2: radius, y1: -(radius), y2: radius, z1: -(radius), z2: radius,
                 symmetric: {x: true, y: true, z: true},
                 offset : {x : 0, y: 0, z: 0}
               }
             )
-          }
-          if(shell==='3p') {
-            // Set of third electron orbitals (3p)
-            //
+
+            // 2p
             for(var i=0;i<=2;i++) {
-              var radius = 4 + (0.1 * (currentElement[1].length + currentElement[0].length)),
+              var radius = 4 + (0.1 * (currentElement.layout[1].length + currentElement.layout[0].length)),
                   segments = 16,
                   rings = 16;
 
@@ -312,26 +369,34 @@
                 sphere.scale.x = sphere.scale.x/2;
                 sphere.position.y = -6;
                 sphere.transparent = true;
-                scene.add(sphere);
-                if(currentElement[2][index][shell]>=1) {
+                if(currentElement.layout[2][index][shell]>=3) {
+                  filledSuborbitals.add(sphere);
+                  currentAtom.add(sphere);
                   makeElectrons(1,
                     {x1:-(radius/2), x2: radius/2, y1: -(radius*2), y2: radius*2, z1: -(radius), z2: radius,
                       symmetric: {x: true, y: false, z: true},
                       offset : {x : 0, y: -6, z: 0}
                     }
                   );
+                } else {
+                  unfilledSuborbitals.add(sphere);
+                  currentAtom.add(sphere);
                 }
                 sphere2.scale.x = sphere2.scale.x/2;
                 sphere2.position.y = 6;
                 sphere2.transparent = true;
-                scene.add(sphere2);
-                if(currentElement[2][index][shell]>=4) {
+                if(currentElement.layout[2][index][shell]>=6) {
+                  filledSuborbitals.add(sphere2);
+                  currentAtom.add(sphere2);
                   makeElectrons(1,
                     {x1:-(radius/2), x2: radius/2, y1: -(radius*2), y2: radius*2, z1: -(radius), z2: radius,
                       symmetric: {x: true, y: false, z: true},
                       offset : {x : 0, y: 6, z: 0}
                     }
                   );
+                } else {
+                  unfilledSuborbitals.add(sphere2);
+                  currentAtom.add(sphere2);
                 }
               } else if(i===1) {
                 sphere.scale.y = sphere.scale.y/2;
@@ -340,23 +405,31 @@
                 sphere2.scale.y = sphere2.scale.y/2;
                 sphere2.position.z = 6;
                 sphere2.transparent = true;
-                scene.add(sphere);
-                if(currentElement[2][index][shell]>=2) {
+                if(currentElement.layout[2][index][shell]>=4) {
+                  filledSuborbitals.add(sphere);
+                  currentAtom.add(sphere);
                   makeElectrons(1,
                     {x1:-(radius), x2: radius, y1: -(radius/2), y2: radius/2, z1: -(radius*2), z2: radius*2,
                       symmetric: {x: true, y: true, z: false},
                       offset : {x : 0, y: 0, z: -6}
                     }
                   );
+                } else {
+                  unfilledSuborbitals.add(sphere);
+                  currentAtom.add(sphere);
                 }
-                scene.add(sphere2);
-                if(currentElement[2][index][shell]>=5) {
+                if(currentElement.layout[2][index][shell]>=7) {
+                  filledSuborbitals.add(sphere2);
+                  currentAtom.add(sphere2);
                   makeElectrons(1,
                     {x1:-(radius), x2: radius, y1: -(radius/2), y2: radius/2, z1: -(radius*2), z2: radius*2,
                       symmetric: {x: true, y: true, z: false},
                       offset : {x : 0, y: 0, z: 6}
                     }
                   );
+                } else {
+                  unfilledSuborbitals.add(sphere2);
+                  currentAtom.add(sphere2);
                 }
               } else if(i===2) {
                 sphere.scale.z = sphere.scale.z/2;
@@ -365,35 +438,53 @@
                 sphere2.scale.z = sphere2.scale.z/2;
                 sphere2.position.x = 6;
                 sphere2.transparent = true;
-                scene.add(sphere);
-                if(currentElement[2][index][shell]>=3) {
+                if(currentElement.layout[2][index][shell]>=5) {
+                  filledSuborbitals.add(sphere);
+                  currentAtom.add(sphere);
                   makeElectrons(1,
                     {x1:-(radius*2), x2: radius*2, y1: -(radius), y2: radius, z1: -(radius/2), z2: radius/2,
                       symmetric: {x: false, y: true, z: true},
                       offset : {x : -6, y: 0, z: 0}
                     }
                   );
+                } else {
+                  unfilledSuborbitals.add(sphere);
+                  currentAtom.add(sphere);
                 }
-                scene.add(sphere2);
-                if(currentElement[2][index][shell]>=6) {
+                if(currentElement.layout[2][index][shell]>=8) {
+                  filledSuborbitals.add(sphere2);
+                  currentAtom.add(sphere2);
                   makeElectrons(1,
                     {x1:-(radius*2), x2: radius*2, y1: -(radius), y2: radius, z1: -(radius/2), z2: radius/2,
                       symmetric: {x: false, y: true, z: true},
                       offset : {x : 6, y: 0, z: 0}
                     }
                   );
+                } else {
+                  unfilledSuborbitals.add(sphere2);
+                  currentAtom.add(sphere2);
                 }
               }
             }
           }
         }
       });
+      scene.add(electrons);
+      scene.add(filledSuborbitals);
+      scene.add(unfilledSuborbitals);
+      scene.add(currentAtom);
     }
   }
 
   THREEx.WindowResize(renderer, camera);
 
   function render() {
+      // if(typeof neutrons !== 'undefined') {
+      //   neutrons.children.forEach(function(element,index,array) {
+      //     element.position.x += 0.1;
+      //   });
+      // }
+      scene.simulate(); // run physics
       renderer.render(scene, camera);
 
       // raycaster.setFromCamera( mouse, camera );

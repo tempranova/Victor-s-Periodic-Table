@@ -19,6 +19,36 @@ body {
   margin-top: -150px;
   margin-left: 15px;
   z-index: 1000;
+  width: 100%;
+}
+/* side legend */
+#side-legend {
+  position: absolute;
+  width: 200px;
+  right: 0;
+  margin-right: 15px;
+  top: 0;
+  margin-top: 75px;
+  border-radius: 10px;
+  min-height: 100px;
+  display:none;
+  transition:0.5s;
+}
+#side-legend .list-group-item {
+  background: rgba(255,255,255,0.7);
+  font-size: 12px;
+}
+#side-legend .view-options {
+  width: 100%;
+}
+#side-legend .toggle {
+  margin-left: -5px;
+  margin-right: 5px;
+}
+/* Periodic table */
+.simple-element-list {
+  margin: 0 auto;
+  width: 650px;
 }
 .element {
   position: absolute;
@@ -57,12 +87,22 @@ body {
 .information {
   position: absolute;
   bottom:0;
-  margin-bottom: 55px;
-  margin-left: 105px;
   background: rgba(255,255,255,0.7);
   color: black;
   padding: 15px;
+  left: 50%;
+  width: 300px;
+  margin-left: -220px;
+  margin-bottom: 55px;
   display: none;
+}
+.element-square {
+  width: 30%;
+  float:left;
+}
+.basic-info {
+  width: 30%;
+  float:left;
 }
 .quicklinks {
   bottom: 0;
