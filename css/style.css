@@ -1,54 +1,133 @@
 body {
-  background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url('../img/dark-green.jpg');
+  background: linear-gradient( rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3) ), url('../img/dark-green.jpg');
+}
+#page-content-wrapper {
+  position: relative !important;
 }
 /* Header */
 .navbar-inverse {
   background: transparent;
   border-color: transparent;
 }
+.sidebar-brand a {
+  font-size: 15px;
+  color: white;
+}
 .logo, .navbar-brand img {
   margin-top:-5px;
   height:35px;
   display:inline;
 }
+.navbar-toggle {
+  background: white;
+  z-index: 1000;
+  margin: 10px;
+}
+.navbar-toggle .icon-bar {
+  background: #333;
+  color: #333;
+}
 /* Small Period Table styles */
-#SmallPeriodicTable {
+.sidebar-nav {
+  position: relative;
+}
+.periodic-menu {
+  padding: 20px;
+}
+.periodic-period {
+  display: block;
+  margin-top: 5px;
+}
+.periodic-menu .periodic-element {
+  width: 40px;
+  height: 40px;
+  text-align:center;
+  border: 1px dotted #333;
+  float: left;
+  padding-top: 10px;
+  color: white;
+}
+.periodic-menu .periodic-element:hover {
+  border: 1px dotted #ccc;
+  background: #333;
+  cursor: pointer;
+}
+.full-table {
+  color: 'green';
+  margin-left: 20px;
+}
+#bottom-legend {
+  display: none;
+  margin-left: 20px;
+  position: absolute;
+  max-width: 80%;
+  bottom: 0px;
+  background: rgba(255,255,255,0.5);
+  padding: 15px;
+  border-radius: 15px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+#bottom-legend .badge {
+  float: right;
+  margin-left: 15px;
+}
+#bottom-legend h3 {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+#bottom-legend button {
+  margin-top: 5px;
+}
+#bottom-legend dl {
+  margin-bottom: 0px;
+  font-size: 12px;
+}
+#bottom-legend dl dd {
+  margin-left: 100px;
+}
+#bottom-legend dl dt {
+  width: 100px;
+  text-align:left;
+}
+#bottom-legend .nameHistory {
+  font-size: 12px;
+}
+#bottom-legend .info-table {
+  margin-top: 10px;
+  border: #eee;
+}
+#bottom-legend .element-link {
+  margin-right: 30px;
+  font-size: 12px;
+  color: #3333ff;
+  margin-top: 10px;
+}
+.dropdown-menu > li > a {
+  padding: 5px 10px;
+}
+input[type=checkbox] {
+  transform: scale(1.5);
+  margin-left:0px;
+  margin-right: 10px;
+}
+@media only screen and (max-width : 767px) {
+  #bottom-legend {
+    max-width: 90%;
+    margin-left: 5%;
+  }
+  #bottom-legend dl dt {
+    float: left;
+  }
+}
+/*#SmallPeriodicTable {
   margin: 0 auto;
   background: black;
   position:absolute;
   margin-top: -150px;
   margin-left: 15px;
   z-index: 1000;
-  width: 100%;
-}
-/* side legend */
-#side-legend {
-  position: absolute;
-  width: 200px;
-  right: 0;
-  margin-right: 15px;
-  top: 0;
-  margin-top: 75px;
-  border-radius: 10px;
-  min-height: 100px;
-  display:none;
-  transition:0.5s;
-}
-#side-legend .list-group-item {
-  background: rgba(255,255,255,0.7);
-  font-size: 12px;
-}
-#side-legend .view-options {
-  width: 100%;
-}
-#side-legend .toggle {
-  margin-left: -5px;
-  margin-right: 5px;
-}
-/* Periodic table */
-.simple-element-list {
-  margin: 0 auto;
-  width: 650px;
 }
 .element {
   position: absolute;
@@ -65,10 +144,10 @@ body {
 .element:hover {
   background: #111;
   cursor: pointer;
-}
+}*/
 /* Atomic Stage styles */
 #AtomicStage {
-  background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url('../img/dark-green.jpg');
+  background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/dark-green.jpg');
   background-size: cover;
   background-position: center center;
   overflow: hidden;
@@ -87,22 +166,12 @@ body {
 .information {
   position: absolute;
   bottom:0;
+  margin-bottom: 55px;
+  margin-left: 105px;
   background: rgba(255,255,255,0.7);
   color: black;
   padding: 15px;
-  left: 50%;
-  width: 300px;
-  margin-left: -220px;
-  margin-bottom: 55px;
   display: none;
-}
-.element-square {
-  width: 30%;
-  float:left;
-}
-.basic-info {
-  width: 30%;
-  float:left;
 }
 .quicklinks {
   bottom: 0;

@@ -1,77 +1,155 @@
 <!DOCTYPE html>
-<!-- The previous line tells the browser, that the page uses the HTML5 standard. -->
+<html lang="en">
 
-<html>
-	<head>
-		<title>Victor's Periodic Table</title>
-		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 		<link rel='shortcut icon' href='img/logo.jpg' />
-		<!-- The following meta line optimizes the site for mobile devices. It sets the viewport size
-		to the screen size, so it will be displayed maximized, but unscaled. -->
-		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-		<link rel="stylesheet" href="bootstrap/bootstrap.css">
-		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="css/style.css">
+		<meta property="og:url"                content="http://victorsperiodictable.com" />
+		<meta property="og:type"               content="article" />
+		<meta property="og:title"              content="Victor's Periodic Table" />
+		<meta property="og:description"        content="A casual and ongoing attempt to 3D model basic atomic structures, including valence shells." />
+		<meta property="og:image"              content="http://victorsperiodictable.com/img/share_image.png" />
+
+		<title>Victor's Periodic Table</title>
+
+    <link rel="stylesheet" href="bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="bootstrap/simple-sidebar.css">
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">		<link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 		<script src="bootstrap/bootstrap.js"></script>
 		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 		<!-- Include Three.js libraries -->
 		<script src="js/libraries/three.js"></script>
-		<script src="js/libraries/physi.js"></script>
 		<script src="js/libraries/Detector.js"></script>
 		<script src="js/libraries/CanvasRenderer.js"></script>
 		<script src="js/libraries/Projector.js"></script>
 		<script src="js/libraries/window_resize.js"></script>
 		<script src="js/libraries/OrbitControls.js"></script>
-	</head>
-	<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="index.html"><img src="img/logo.jpg" class="logo" />&nbsp;&nbsp;Victor's Periodic Table</a>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="index.html"><img src="img/logo.jpg" class="logo" />&nbsp;&nbsp;Victor's Periodic Table</a>
+                </li>
+		            <li class="active"><a href="index.html">Home</a></li>
+		            <li><a href="about.html">About</a></li>
+            </ul>
+						<div class="periodic-menu"></div>
+            <p class="full-table">More transparent electron shells denote filled shells.</p>
+            <!-- <p class="full-table">See full periodic table</p> -->
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-    <div class="information">
-			<div class="element-info">
-				<div class="atomic-number">2</div>
-				<div class="element-symbol">He</div>
-				<div class="element-name">Helium</div>
-				<div class="atomic-mass">4.003</div>
-			</div>
-			<div class="display-info">
-				<div class="electron-shells">List of electron shells in checkbox list</div>
-				<div class="particles">List of proton, neutron, electron visibility</div>
-				<div class="modal">Maybe a modal dropdown</div>
-			</div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper" style="padding:0px;">
+            <div class="visible-sm visible-xs">
+              <button type="button" id="menu-toggle" style="position:absolute;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" style="float:none;">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="container-fluid" style="padding:0px;">
+              	<div class="row">
+                  <p class="lead" style="text-align:center;position: absolute;width:100%;color: #eee;padding: 20px 40px;margin-top:50px;">Click an element on the left to get started.</p>
+									<div id="bottom-legend">
+                    <div class="row">
+                      <div class="col-xs-12">
+
+                        <h3><span class="element-name">Hydrogen</span> (<span class="element-symbol"></span>) <span class="nameHistory"></span> <a target="_blank" class="element-link" href="http://www.rsc.org/periodic-table/element/1/hydrogen">(see more)</a></h3>
+                      </div>
+                      <div class="col-sm-4 col-xs-6">
+                        <dl class="dl-horizontal">
+                          <dt>Group</dt>
+                          <dd class="group">1</dd>
+                          <dt>Period</dt>
+                          <dd class="period">1</dd>
+                          <dt>Atomic No.</dt>
+                          <dd class="atomicNumber">1</dd>
+                          <dt>Atomic wt.</dt>
+                          <dd class="atomicWeight">1.008</dd>
+                        </dl>
+                      </div>
+                      <div class="col-xs-4 hidden-xs">
+                        <dl class="dl-horizontal">
+                          <dt>State at 20&deg;C</dt>
+                          <dd class="state">Gas</dd>
+                          <dt>Melting Point</dt>
+                          <dd class="meltingPoint">13.99 K</dd>
+                          <dt>Boiling Point</dt>
+                          <dd class="boilingPoint">20.27 K</dd>
+                          <dt>Isotopes</dt>
+                          <dd class="isotopes"><sup>1</sup>H, <sup>2</sup>H</dd>
+                        </dl>
+                      </div>
+                      <div class="col-sm-4 col-xs-6">
+                        <dl class="dl-horizontal hidden-xs">
+                          <dt>Electron Config.</dt>
+                          <dd class="electronConfig">1s<sup>1</sup></dd>
+                          <dt>Oxidation state</dt>
+                          <dd class="oxidationStates">+1</dd>
+                        </dl>
+                        <div class="dropup">
+                          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Explore Atom
+                            <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu atom-dropdown-menu" aria-labelledby="dropdownMenu1">
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+									<div id="AtomicStage"></div>
+									<div id="SmallPeriodicTable">
+										<div class="simple-element-list"></div>
+									</div>
+
+							    <!-- <div class="information">
+							    </div> -->
+									<!-- <div class="quicklinks">
+										<p class="back-to-start">Back to start</p>
+									</div> -->
+								</div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
     </div>
-		<div class="quicklinks">
-			<p class="back-to-start">Back to start</p>
-		</div>
+    <!-- /#wrapper -->
 
-		<div id="AtomicStage"></div>
-
-		<div id="side-legend"></div>
-
-		<div id="SmallPeriodicTable">
-			<div class="simple-element-list"></div>
-		</div>
-
+    <!-- jQuery -->
 		<script src="js/PeriodicConstants.js"></script>
 		<script src="js/AtomicStage.js"></script>
+		<script src="js/AtomicFunctions.js"></script>
 		<script src="js/Interface.js"></script>
-		<!-- <script src="js/SmallPeriodicTable.js"></script> -->
-	</body>
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+</body>
+
 </html>
